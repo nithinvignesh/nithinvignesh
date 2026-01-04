@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { fetchTodos, createTodo, updateTodo, deleteTodo } from '../api'
+import Chatbot from './Chatbot'
 
 export default function TodoApp({ token, onLogout }){
   const [todos, setTodos] = useState([])
@@ -13,11 +14,17 @@ export default function TodoApp({ token, onLogout }){
 
   useEffect(()=>{ load() },[])
 
-  const add = async (e)=>{
-    e.preventDefault();
-    const t = await createTodo(token,{ title, description: desc })
-    setTitle(''); setDesc('');
-    load()
+  const add = async (title, desc = '') => {
+    const t = await createTodo(token, { title, description: desc })
+    await load()
+    return t
+  }
+
+  const addFromForm = async (e) => {
+    e.preventDefault()
+    await add(title, desc)
+    setTitle('')
+    setDesc('')
   }
 
   const toggle = async (t)=>{
@@ -36,7 +43,7 @@ export default function TodoApp({ token, onLogout }){
         </div>
       </div>
 
-      <form onSubmit={add} className="row g-2 mb-3">
+      <form onSubmit={addFromForm} className="row g-2 mb-3">
         <div className="col-sm-5">
           <input value={title} onChange={e=>setTitle(e.target.value)} className="form-control" placeholder="New todo title" required />
         </div>
@@ -69,6 +76,7 @@ export default function TodoApp({ token, onLogout }){
           </div>
         ))}
       </div>
+      <Chatbot todos={todos} onAddTodo={(title) => add(title)} onToggleTodo={toggle} onDeleteTodo={remove} />
     </div>
   )
 }
