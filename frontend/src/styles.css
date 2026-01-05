@@ -1,0 +1,7 @@
+:root{
+  --accent-1: #ff8a65;
+  --accent-2: #4fc3f7;
+}
+body{background:linear-gradient(120deg,var(--accent-2),#fff 60%)}
+.text-gradient{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.card{border-radius:12px}
